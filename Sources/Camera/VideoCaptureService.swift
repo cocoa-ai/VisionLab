@@ -64,7 +64,7 @@ private extension VideoCaptureService {
     session.sessionPreset = .medium
 
     // Setup input
-    guard let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: position) else {
+    guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position) else {
       throw Error.noCaptureDevice
     }
 
