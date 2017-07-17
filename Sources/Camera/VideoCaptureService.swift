@@ -37,8 +37,8 @@ public final class VideoCaptureService: NSObject {
 
   // MARK: - Capturing
 
-  /// Chack video permission and start capturing video output
-  public func startCapturing() {
+  /// Chack video permission and start capturing video output (by default back one)
+  public func startCapturing(_ camera: AVCaptureDevice.Position = .back) {
     permissionService.checkPersmission { [weak self] error in
       guard let `self` = self else {
         return
@@ -47,7 +47,7 @@ public final class VideoCaptureService: NSObject {
         if let error = error {
           throw error
         }
-        try self.setupCamera()
+        try self.setupCamera(position: camera)
       } catch {
         self.delegate?.videoCaptureService(self, didFailWithError: error)
       }
@@ -59,12 +59,12 @@ public final class VideoCaptureService: NSObject {
 
 private extension VideoCaptureService {
   /// Setup camera input, output, preview layer and start session
-  func setupCamera() throws {
+  func setupCamera(position: AVCaptureDevice.Position = .back) throws {
     session.beginConfiguration()
     session.sessionPreset = .medium
 
     // Setup input
-    guard let device = AVCaptureDevice.default(for: .video) else {
+    guard let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: position) else {
       throw Error.noCaptureDevice
     }
 
