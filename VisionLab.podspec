@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "VisionLab"
-  s.version      = "0.1.0"
+  s.version      = "0.2.0"
   s.summary      = "Common sources for projects using Vision framework"
   s.homepage     = "https://github.com/cocoa-ml/VisionLab"
   s.license      = { :type => "MIT", :file => "LICENSE" }
