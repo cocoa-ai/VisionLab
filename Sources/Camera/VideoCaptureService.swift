@@ -38,7 +38,7 @@ public final class VideoCaptureService: NSObject {
   // MARK: - Capturing
 
   /// Chack video permission and start capturing video output (by default back one)
-  public func startCapturing(_ position: AVCaptureDevice.Position = .back) {
+  public func startCapturing(_ position: AVCaptureDevice.Position = .back, orientation: AVCaptureVideoOrientation = .portrait) {
     permissionService.checkPersmission { [weak self] error in
       guard let `self` = self else {
         return
@@ -47,7 +47,7 @@ public final class VideoCaptureService: NSObject {
         if let error = error {
           throw error
         }
-        try self.setupCamera(position: position)
+        try self.setupCamera(position: position, orientation: orientation)
       } catch {
         self.delegate?.videoCaptureService(self, didFailWithError: error)
       }
