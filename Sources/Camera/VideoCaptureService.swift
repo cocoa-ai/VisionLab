@@ -59,7 +59,7 @@ public final class VideoCaptureService: NSObject {
 
 private extension VideoCaptureService {
   /// Setup camera input, output, preview layer and start session
-  func setupCamera(position: AVCaptureDevice.Position = .back) throws {
+  func setupCamera(position: AVCaptureDevice.Position = .back, orientation: AVCaptureVideoOrientation = .portrait) throws {
     session.beginConfiguration()
     session.sessionPreset = .medium
 
@@ -77,11 +77,11 @@ private extension VideoCaptureService {
     output.alwaysDiscardsLateVideoFrames = true
     output.setSampleBufferDelegate(self, queue: DispatchQueue(label: "VideoCaptureService.SampleBufferQueue"))
     session.addOutput(output)
-    output.connections.first?.videoOrientation = .portrait
+    output.connections.first?.videoOrientation = orientation
 
     // Setup preview layer
     previewLayer.videoGravity = .resizeAspectFill
-    previewLayer.connection?.videoOrientation = .portrait
+    previewLayer.connection?.videoOrientation = orientation
 
     // Run session
     session.commitConfiguration()
