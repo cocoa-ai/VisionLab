@@ -38,7 +38,7 @@ public final class VideoCaptureService: NSObject {
   // MARK: - Capturing
 
   /// Chack video permission and start capturing video output (by default back one)
-  public func startCapturing(_ position: AVCaptureDevice.Position = .back) {
+  public func startCapturing(_ position: AVCaptureDevice.Position = .back, orientation: AVCaptureVideoOrientation = .portrait) {
     permissionService.checkPersmission { [weak self] error in
       guard let `self` = self else {
         return
@@ -47,7 +47,7 @@ public final class VideoCaptureService: NSObject {
         if let error = error {
           throw error
         }
-        try self.setupCamera(position: position)
+        try self.setupCamera(position: position, orientation: orientation)
       } catch {
         self.delegate?.videoCaptureService(self, didFailWithError: error)
       }
@@ -59,7 +59,7 @@ public final class VideoCaptureService: NSObject {
 
 private extension VideoCaptureService {
   /// Setup camera input, output, preview layer and start session
-  func setupCamera(position: AVCaptureDevice.Position = .back) throws {
+  func setupCamera(position: AVCaptureDevice.Position = .back, orientation: AVCaptureVideoOrientation = .portrait) throws {
     session.beginConfiguration()
     session.sessionPreset = .medium
 
@@ -77,11 +77,11 @@ private extension VideoCaptureService {
     output.alwaysDiscardsLateVideoFrames = true
     output.setSampleBufferDelegate(self, queue: DispatchQueue(label: "VideoCaptureService.SampleBufferQueue"))
     session.addOutput(output)
-    output.connections.first?.videoOrientation = .portrait
+    output.connections.first?.videoOrientation = orientation
 
     // Setup preview layer
     previewLayer.videoGravity = .resizeAspectFill
-    previewLayer.connection?.videoOrientation = .portrait
+    previewLayer.connection?.videoOrientation = orientation
 
     // Run session
     session.commitConfiguration()
