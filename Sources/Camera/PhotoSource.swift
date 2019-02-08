@@ -4,7 +4,7 @@ import UIKit
 public protocol PhotoSourceControllerDelegate: class {
   /// Sent to the delegate when a photo source was selected
   func photoSourceController(_ controller: PhotoSourceController,
-                             didSelectSourceType sourceType: UIImagePickerControllerSourceType)
+                             didSelectSourceType sourceType: UIImagePickerController.SourceType)
 }
 
 /// Controller used to present a picker where the user can select a source for a photo
@@ -23,7 +23,7 @@ public final class PhotoSourceController: UIAlertController {
 // MARK: - Actions
 
 private extension PhotoSourceController {
-  func addAction(forSourceType sourceType: UIImagePickerControllerSourceType, title: String) {
+  func addAction(forSourceType sourceType: UIImagePickerController.SourceType, title: String) {
     let action = UIAlertAction(title: title, style: .default) { [weak self] _ in
       guard let `self` = self else {
         return
