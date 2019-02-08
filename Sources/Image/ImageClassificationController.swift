@@ -41,7 +41,7 @@ PhotoSourceControllerDelegate, UINavigationControllerDelegate, UIImagePickerCont
   // MARK: - PhotoSourceControllerDelegate
 
   public func photoSourceController(_ controller: PhotoSourceController,
-                                    didSelectSourceType sourceType: UIImagePickerControllerSourceType) {
+                                    didSelectSourceType sourceType: UIImagePickerController.SourceType) {
     let imagePicker = UIImagePickerController()
     imagePicker.delegate = self
     imagePicker.allowsEditing = true
@@ -52,8 +52,11 @@ PhotoSourceControllerDelegate, UINavigationControllerDelegate, UIImagePickerCont
   // MARK: - UIImagePickerControllerDelegate
 
   public func imagePickerController(_ picker: UIImagePickerController,
-                                    didFinishPickingMediaWithInfo info: [String : Any]) {
-    let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage
+                                    didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
+    let editedImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.editedImage)] as? UIImage
     guard let image = editedImage, let ciImage = CIImage(image: image) else {
       print("Can't analyze selected photo")
       return
@@ -71,4 +74,14 @@ PhotoSourceControllerDelegate, UINavigationControllerDelegate, UIImagePickerCont
       self?.classificationService.classify(image: ciImage)
     }
   }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
 }
